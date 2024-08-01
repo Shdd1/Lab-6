@@ -35,17 +35,21 @@ public class EmployeeController {
         employees.set(index,employee);
         return ResponseEntity.status(200).body(new ApiResponse("Success update"));
     }
-    @DeleteMapping("/delete/{index}")
-    public ResponseEntity deleteEmployee(@PathVariable int index){
-        employees.remove(index);
-        return ResponseEntity.status(200).body(new ApiResponse("Success delete"));
-
+   @DeleteMapping("/delete/{id}")
+    public ResponseEntity deleteEmployee(@PathVariable String id) {
+       for (Employees e:employees) {
+           if (e.getId().equals(id))
+               employees.remove(e);
+           return ResponseEntity.status(200).body(new ApiResponse("Success delete"));
+       }
+       return ResponseEntity.status(400).body(new ApiResponse("Id not found"));
     }
-    @GetMapping("/search/{position}")
+  @GetMapping("/search/{position}")
     public ResponseEntity searchEmployee(@PathVariable String position){
         ArrayList<Employees>employeesPosition=new ArrayList<>();
         for(Employees e:employees){
-            if(e.getPosition().equalsIgnoreCase(position)){
+            if(position.equalsIgnoreCase("supervisor")||position.equalsIgnoreCase("coordinator")){
+                if(e.getPosition().equals(position))
                 employeesPosition.add(e);
             }
         }
